@@ -1,90 +1,91 @@
-# Spotify Song Popularity Prediction
+# 🎧 Spotify Song Popularity Prediction
 
-## Project Overview
-This project focuses on analyzing Spotify song data and building a machine learning model to predict song popularity based on available features. The project includes data exploration, visualization, preprocessing, model training, evaluation, and feature importance analysis.
+A data science project that explores a dataset of 6,300 Spotify tracks and builds a
+machine learning model to predict a song's popularity score (0–100). Includes a full
+EDA notebook, a trained model, and an interactive Streamlit web app.
 
-## Dataset
-The dataset contains Spotify track information including:
+## 📊 Dataset
 
-- Track ID
-- Song name
-- Genre
-- Artist
-- Album
-- Popularity score
-- Duration (milliseconds)
-- Explicit content indicator
+The dataset contains 6,300 tracks with the following columns:
 
-## Project Objectives
+| Column        | Description                          |
+|---------------|---------------------------------------|
+| `id`          | Unique Spotify track ID               |
+| `name`        | Track name                            |
+| `genre`       | Genre (126 unique genres)             |
+| `artists`     | Artist(s) name                        |
+| `album`       | Album name                            |
+| `popularity`  | Popularity score (0–100) — **target** |
+| `duration_ms` | Track duration in milliseconds        |
+| `explicit`    | Whether the track has explicit content|
 
-- Analyze patterns in Spotify song data
-- Explore relationships between song features and popularity
-- Build a machine learning model to predict popularity
-- Identify important factors affecting song popularity
+No missing values or duplicate rows were found in the dataset.
 
-## Data Preprocessing
+## 🔍 Project Workflow
 
-The following preprocessing steps were performed:
+1. **Data Cleaning** — checked for missing values and duplicates
+2. **Exploratory Data Analysis (Seaborn/Matplotlib)** — correlation heatmap, popularity
+   distribution, top artists by average popularity, genre and explicit-content
+   comparisons
+3. **Model Training (Scikit-learn)** — a `RandomForestRegressor` trained inside a
+   `Pipeline` with a `ColumnTransformer` (`StandardScaler` for numeric features,
+   `OneHotEncoder` for categorical features)
+4. **Feature Importance** — identified which features influence predictions most
+5. **Model Persistence** — trained pipeline saved with `joblib`
+6. **Database Storage (SQLAlchemy)** — dataset and predictions stored in a local
+   SQLite database
+7. **Streamlit App** — interactive UI for exploring the data and getting live
+   predictions
 
-- Dataset inspection and understanding
-- Checking missing values
-- Removing duplicate records
-- Handling categorical features
-- Preparing data for machine learning
+## 🤖 Model Details
 
-## Exploratory Data Analysis (EDA)
+- **Algorithm:** Random Forest Regressor (`max_depth=15`, `min_samples_leaf=2`)
+- **Features used:** `genre`, `duration_ms`, `explicit`
+- **Target:** `popularity`
+- **Test R² score:** ~0.19–0.27
 
-The project includes visual analysis such as:
+The moderate accuracy is expected given the limited feature set. Real-world
+popularity is driven mainly by factors this dataset doesn't include — artist fame,
+stream counts, playlist adds, and audio characteristics like energy or
+danceability.
 
-- Popularity distribution analysis
-- Artist and genre-based analysis
-- Relationship between song duration and popularity
-- Explicit vs non-explicit song popularity comparison
-- Feature correlation analysis
+## 🚀 Streamlit App
 
-## Machine Learning Model
+An interactive app with four sections:
 
-### Random Forest Regressor
+- **Overview** — dataset stats and model summary
+- **Explore the Data** — correlation heatmap, popularity distribution, top artists,
+  duration vs. popularity, genre/explicit comparisons
+- **Predict Popularity** — pick a genre, duration, and explicit flag to get a live
+  popularity prediction
+- **Database** — run SQL queries against the SQLite-stored dataset
 
-A Random Forest Regression model was used to predict song popularity.
+### Running locally
 
-Reasons for selecting Random Forest:
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-- Handles non-linear relationships effectively
-- Works well with mixed feature types
-- Provides feature importance insights
+Make sure `app.py`, `requirements.txt`, `spotify_popularity_model.pkl`, and
+`spotify_tracks.csv` are all in the same folder.
 
-## Model Evaluation
+## 🛠️ Tech Stack
 
-The model was evaluated using:
-
-- R² Score
-- RMSE (Root Mean Square Error)
-
-The model achieved an R² score of approximately 19%–27%, indicating limited predictive performance. The result is influenced by the limited features available in the dataset.
-
-## Feature Importance
-
-Feature importance analysis was performed to understand which features contribute more towards popularity prediction.
-
-## Future Improvements
-
-Model performance can be improved by including additional features such as:
-
-- Audio characteristics (energy, danceability, tempo, etc.)
-- Artist popularity metrics
-- Streaming-related information
-- User engagement features
-
-## Technologies Used
-
-- Python
-- Jupyter Notebook
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Scikit-learn
+- Python, Pandas, NumPy
+- Scikit-learn (Pipeline, ColumnTransformer, RandomForestRegressor)
+- Seaborn, Matplotlib
 - SQLAlchemy
+- Streamlit
+- Joblib
 
-## Project Structure
+## 📈 Future Improvements
+
+- Add audio features (energy, danceability, tempo, valence) to the dataset
+- Include artist popularity/follower counts
+- Try additional models (Gradient Boosting, XGBoost) for comparison
+- Add hyperparameter tuning with `GridSearchCV`
+
+## 👤 Author
+
+Muaaz — [GitHub: muaazcodes](https://github.com/muaazcodes)
